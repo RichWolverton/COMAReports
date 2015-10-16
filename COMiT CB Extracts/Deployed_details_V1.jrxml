@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2015-10-14T15:06:46 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Deployed_details" language="groovy" pageWidth="200" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="200" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty" isIgnorePagination="true" uuid="754ab869-786f-4ec5-a14c-abaf232ef269">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="COMiT QA"/>
+	<parameter name="HostName" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["\\iReport\\COMiT DB Extracts\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[select 
+cs.nodeid,
+cs.nodename,
+cs.numcpuconfig1,
+cs.numcputotal1,
+cs.ramdescription,
+cs.ramsize,
+cs.ramtype,
+cs.ramunit,
+cs.SYSTEMROLE,
+cs.DESCRIPTION,
+cs.SYSTEMROLE,
+os.description as OPSYS,
+os.osid,
+os.version
+
+from  computersystem cs 
+   LEFT OUTER join dpacos os on (cs.nodeid = os.nodeid)
+where
+cs.TLOAMSTATUS = 'ACTIVE'
+and UPPER(cs.nodename)   = UPPER( $P{HostName} )
+
+order by cs.nodeid desc 
+]]>
+	</queryString>
+	<field name="NODEID" class="java.math.BigDecimal"/>
+	<field name="NODENAME" class="java.lang.String"/>
+	<field name="NUMCPUCONFIG1" class="java.math.BigDecimal"/>
+	<field name="NUMCPUTOTAL1" class="java.math.BigDecimal"/>
+	<field name="RAMDESCRIPTION" class="java.lang.String"/>
+	<field name="RAMSIZE" class="java.math.BigDecimal"/>
+	<field name="RAMTYPE" class="java.lang.String"/>
+	<field name="RAMUNIT" class="java.lang.String"/>
+	<field name="SYSTEMROLE" class="java.lang.String"/>
+	<field name="DESCRIPTION" class="java.lang.String"/>
+	<field name="COLUMN_11" class="java.lang.String"/>
+	<field name="OPSYS" class="java.lang.String"/>
+	<field name="OSID" class="java.math.BigDecimal"/>
+	<field name="VERSION" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="61" height="12" uuid="471483e3-da2f-44b0-8f91-f69a9639fcd9">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODEID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="61" y="0" width="139" height="12" uuid="c380b029-7a08-4466-baa7-6fd7d5690a0f">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODENAME}]]></textFieldExpression>
+				<patternExpression><![CDATA[$F{NODENAME}.isEmpty()? ',' : $F{NODENAME}]]></patternExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</summary>
+</jasperReport>

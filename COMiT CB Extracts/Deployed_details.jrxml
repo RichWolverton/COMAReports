@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2015-10-06T13:27:48 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Deployed_details" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="842" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty" isIgnorePagination="true" uuid="754ab869-786f-4ec5-a14c-abaf232ef269">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="COMiT Prod"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="HostName" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["\\iReport\\COMiT DB Extracts\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[select 
+cs.nodeid,
+cs.nodename,
+cs.numcpuconfig1,
+cs.numcputotal1,
+cs.ramdescription,
+cs.ramsize,
+cs.ramtype,
+cs.ramunit,
+cs.SYSTEMROLE,
+cs.DESCRIPTION,
+cs.SYSTEMROLE,
+os.description as OPSYS,
+os.osid,
+os.version
+
+from  computersystem cs 
+   LEFT OUTER join dpacos os on (cs.nodeid = os.nodeid)
+where
+cs.TLOAMSTATUS = 'ACTIVE'
+and UPPER(cs.NODENAME) = UPPER($P{HostName})
+
+order by cs.nodeid desc]]>
+	</queryString>
+	<field name="NODEID" class="java.math.BigDecimal"/>
+	<field name="NODENAME" class="java.lang.String"/>
+	<field name="NUMCPUCONFIG1" class="java.math.BigDecimal"/>
+	<field name="NUMCPUTOTAL1" class="java.math.BigDecimal"/>
+	<field name="RAMDESCRIPTION" class="java.lang.String"/>
+	<field name="RAMSIZE" class="java.math.BigDecimal"/>
+	<field name="RAMTYPE" class="java.lang.String"/>
+	<field name="RAMUNIT" class="java.lang.String"/>
+	<field name="SYSTEMROLE" class="java.lang.String"/>
+	<field name="DESCRIPTION" class="java.lang.String"/>
+	<field name="COLUMN_11" class="java.lang.String"/>
+	<field name="OPSYS" class="java.lang.String"/>
+	<field name="OSID" class="java.math.BigDecimal"/>
+	<field name="VERSION" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="61" height="12" uuid="471483e3-da2f-44b0-8f91-f69a9639fcd9">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODEID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="61" y="0" width="57" height="12" uuid="c380b029-7a08-4466-baa7-6fd7d5690a0f">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NODENAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="118" y="0" width="57" height="12" uuid="5ff67f77-9930-4e02-b183-ab58d1b4b6dd">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMCPUCONFIG1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="175" y="0" width="57" height="12" uuid="e7e48751-0810-491d-845e-3605046598fa">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMCPUTOTAL1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="232" y="0" width="57" height="12" uuid="1448741e-a814-4ace-97ec-04fd3a6c7320">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RAMDESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="0" width="57" height="12" uuid="7f47199f-b34b-4874-aa91-b21264e9aa78">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RAMSIZE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="346" y="0" width="57" height="12" uuid="acc5e420-aa04-4bc8-89ac-ca6b330899b5">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RAMTYPE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="403" y="0" width="57" height="12" uuid="3bae9cb1-5662-4f34-b72b-24684cac2416">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RAMUNIT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="0" width="57" height="12" uuid="62d3c906-2cd7-4437-95be-514797413fd1">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SYSTEMROLE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="517" y="0" width="57" height="12" uuid="899a69f2-8483-4d52-a892-0f9a47286c88">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="574" y="0" width="57" height="12" uuid="77cd6b20-dd74-4191-b573-1d4197d5fb13">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COLUMN_11}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="631" y="0" width="57" height="12" uuid="013b0863-3c1a-440a-af4e-7ae6d81c1dc8">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OPSYS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="688" y="0" width="57" height="12" uuid="fa4ce954-b718-429b-9a73-40804eccc03d">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OSID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="745" y="0" width="57" height="12" uuid="159b112f-bbf1-4f72-9260-1f8ebe4cbec9">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VERSION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</summary>
+</jasperReport>
