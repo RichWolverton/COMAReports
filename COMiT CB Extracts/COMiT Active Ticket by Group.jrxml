@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
+<!-- 2016-02-22T12:45:45 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Active Service Requests" language="groovy" pageWidth="700" pageHeight="1000" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="700" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="f1d56afb-6f9c-4c9e-b750-dcc973f96c49">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/IT_Service_Management/Lines_of_Business/active_incdnts_chngs_srs_security"/>
+	<property name="ireport.jasperserver.url" value="https://reports.itd.state.ma.us/jasperserver-pro/services/repository"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="COMiT Prod"/>
+	<parameter name="url_comit_app" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["https://comit.state.ma.us/maximo/ui/maximo.jsp"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="url_comit_params" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["?event=loadapp&value=pluspinc"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="url_external_report" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["http://osgdashboard.anf.govt.state.ma.us:83/scripts/AvailabilityReport.asp"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT distinct
+     i.ticketid                      AS srvreq_no,
+     i.internalpriority              AS priority,
+     i.description                   AS summary,
+     i.reportdate                    AS reported_date,
+     i.actualfinish                  AS actual_finish_date,
+     i.targetfinish                  AS target_finish_date,
+     i.class                         AS type,
+     cs.classificationid             AS class_id,
+     l.hierarchy_path                AS class_hierarchy,
+     cs.description                  AS class_description,
+     pg.persongroup                  AS ownergroup_id,
+     pg.description                  AS ownergroup_description,
+     i.status                        AS status,
+
+     CASE WHEN i.actualfinish <= i.targetfinish
+          THEN 'Yes'
+          ELSE 'No'
+     END                             AS meets_sla,
+     i.ticketuid                     AS uniqueid,
+     i.pluspcustomer                 AS customer
+FROM
+     maximo.ticket                               i
+     INNER JOIN maximo.persongroup          pg ON i.ownergroup = pg.persongroup
+     INNER JOIN maximo.classstructure       cs ON i.classificationid = cs.classificationid
+     INNER JOIN
+     (         SELECT
+               l.agency            AS agency,
+               l.class             AS class,
+               l.class_id          AS class_id,
+               l.objectname        AS object_name,
+               l.lvl1_class||'-'||
+               l.lvl2_class||'-'||
+               l.lvl3_class||'-'||
+               l.lvl4_class||'-'||
+               l.lvl5_class        AS hierarchy_path
+          FROM
+               ctg_read.lobview l
+          WHERE  l.objectname in ('SR','INCIDENT')
+            )
+                                    l ON cs.classstructureid = l.class_id
+
+WHERE
+     1=1
+ and i.class in ('SR','INCIDENT')
+ AND i.status != 'CAN'
+ AND i.status != 'CLOSE'
+ AND i.status != 'CLOSED'
+ AND i.status != 'PENDSOL'
+ AND i.status != 'DENIED'
+ AND i.status != 'DECLINED'
+ AND i.status != 'PENDRELREC'
+ AND i.status != 'UNFULFILLED'
+ AND i.internalpriority < '4'
+ AND i.pluspcustomer != 'EOPSS'
+ AND i.pluspcustomer != 'MASSHR'
+ AND l.hierarchy_path LIKE '50-%'
+ORDER BY
+     i.class,
+     i.internalpriority,
+     ownergroup_id ASC,
+     reported_date ASC]]>
+	</queryString>
+	<field name="SRVREQ_NO" class="java.lang.String"/>
+	<field name="PRIORITY" class="java.math.BigDecimal"/>
+	<field name="SUMMARY" class="java.lang.String"/>
+	<field name="REPORTED_DATE" class="java.sql.Timestamp"/>
+	<field name="ACTUAL_FINISH_DATE" class="java.sql.Timestamp"/>
+	<field name="TARGET_FINISH_DATE" class="java.sql.Timestamp"/>
+	<field name="TYPE" class="java.lang.String"/>
+	<field name="CLASS_ID" class="java.lang.String"/>
+	<field name="CLASS_HIERARCHY" class="java.lang.String"/>
+	<field name="CLASS_DESCRIPTION" class="java.lang.String"/>
+	<field name="OWNERGROUP_ID" class="java.lang.String"/>
+	<field name="OWNERGROUP_DESCRIPTION" class="java.lang.String"/>
+	<field name="STATUS" class="java.lang.String"/>
+	<field name="MEETS_SLA" class="java.lang.String"/>
+	<field name="UNIQUEID" class="java.math.BigDecimal"/>
+	<field name="CUSTOMER" class="java.lang.String"/>
+	<variable name="CLOB_LENGTH" class="java.lang.Integer" resetType="None">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="TTR_DAYS" class="java.lang.Long" resetType="None">
+		<variableExpression><![CDATA[$F{REPORTED_DATE} == null || $F{ACTUAL_FINISH_DATE} == null
+? null
+: Math.round( ($F{ACTUAL_FINISH_DATE}.getTime() - $F{REPORTED_DATE}.getTime()) / ((double) (24*60*60*1000)) )]]></variableExpression>
+	</variable>
+	<variable name="TTR_HOURS" class="java.lang.Long" resetType="None">
+		<variableExpression><![CDATA[$F{REPORTED_DATE} == null || $F{ACTUAL_FINISH_DATE} == null
+? null
+: Math.round( ($F{ACTUAL_FINISH_DATE}.getTime() - $F{REPORTED_DATE}.getTime()) / ((double) (60*60*1000)) )]]></variableExpression>
+	</variable>
+	<variable name="TTR_MINUTES" class="java.lang.Long" resetType="None">
+		<variableExpression><![CDATA[$F{REPORTED_DATE} == null || $F{ACTUAL_FINISH_DATE} == null
+? null
+: Math.round( ($F{ACTUAL_FINISH_DATE}.getTime() - $F{REPORTED_DATE}.getTime()) / ((double) (60*1000)) )]]></variableExpression>
+	</variable>
+	<variable name="COMIT_INCID_ID" class="java.lang.String" resetType="None">
+		<variableExpression><![CDATA["&uniqueid=" + $F{UNIQUEID}]]></variableExpression>
+	</variable>
+	<group name="Type">
+		<groupExpression><![CDATA[$F{TYPE}]]></groupExpression>
+		<groupHeader>
+			<band height="14" splitType="Stretch">
+				<textField>
+					<reportElement x="0" y="0" width="700" height="14" uuid="b55bacfb-ff6a-4eea-a5b5-178c893fe267"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA['Active Security ' + $F{TYPE} + ' Tickets']]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="13" width="700" height="1" uuid="c8ef8431-a6ca-4e18-b6c6-a805d433e350"/>
+					<graphicElement>
+						<pen lineStyle="Dashed"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band splitType="Prevent"/>
+	</pageHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField hyperlinkType="Reference" hyperlinkTarget="Blank">
+				<reportElement stretchType="RelativeToTallestObject" x="20" y="0" width="53" height="12" forecolor="#0000FF" uuid="f85db32a-b6fd-4b61-8b50-db253c65bb22"/>
+				<box leftPadding="5"/>
+				<textElement textAlignment="Left">
+					<font size="9" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SRVREQ_NO}]]></textFieldExpression>
+				<hyperlinkReferenceExpression><![CDATA[$P{url_comit_app} + $P{url_comit_params} + $V{COMIT_INCID_ID}]]></hyperlinkReferenceExpression>
+				<hyperlinkParameter name="uniqueid">
+					<hyperlinkParameterExpression><![CDATA["519296"]]></hyperlinkParameterExpression>
+				</hyperlinkParameter>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="20" height="12" uuid="5b0b80c8-20d4-478d-83ed-78bb9bf9f544"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRIORITY}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="85" y="0" width="300" height="12" uuid="7207a3ca-7d30-4163-98cf-c739361ce866"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SUMMARY}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="385" y="0" width="220" height="12" uuid="4fa17857-ae72-49a1-8e84-2fad521e2971"/>
+				<textElement textAlignment="Left">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OWNERGROUP_DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="605" y="0" width="55" height="12" uuid="99b0c95d-4914-40c4-bad9-8e0a5172de01"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STATUS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="660" y="0" width="40" height="12" uuid="e7eab07c-1428-4435-8c1a-62978c0dbadf">
+					<printWhenExpression><![CDATA[1 == 0]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MEETS_SLA}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band/>
+	</detail>
+</jasperReport>
